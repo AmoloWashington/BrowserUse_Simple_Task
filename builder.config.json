@@ -1,0 +1,6 @@
+{
+  "command": "python simpletask.py",
+  "serverUrl": "http://localhost:8000/",
+  "authenticateProxy": false,
+  "commitMode": "commits"
+}

@@ -24,7 +24,7 @@ controller = Controller(output_model=Posts)
 
 async def main():
     task = 'Go to hackernews show hn and give me the first 5 posts'
-    model = OpenAIAdapter(model="gpt-3.5-turbo")
+    model = OpenAIAdapter(model="gpt-4")
     agent = Agent(task=task, llm=model, controller=controller)
 
     history = await agent.run()

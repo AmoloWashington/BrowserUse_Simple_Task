@@ -1,47 +1,60 @@
-#!/usr/bin/env python3
 """
-Simple test for the LLM adapter
+Minimal test to verify everything works
 """
-
 import asyncio
-from llm_adapter import OpenAIAdapter
-from langchain_core.messages import SystemMessage, HumanMessage
 from dotenv import load_dotenv
+import os
 
 load_dotenv()
 
-async def test_adapter():
-    print("Testing LLM Adapter...")
+class MinimalLLM:
+    def __init__(self):
+        from openai import AsyncOpenAI
+        self.client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+        self.model = "gpt-4o-mini"
+        self.model_name = "gpt-4o-mini"
+        self.provider = "openai"
     
-    adapter = OpenAIAdapter(model="gpt-3.5-turbo")
-    
-    # Test with different input types
-    test_cases = [
-        # String input
-        "Hello, this is a test",
+    async def ainvoke(self, messages):
+        content = str(messages)
+        if hasattr(messages, 'content'):
+            content = messages.content
         
-        # List of LangChain messages (similar to what BrowserUse sends)
-        [
-            SystemMessage(content="You are a helpful assistant."),
-            HumanMessage(content="Say hello")
-        ],
+        response = await self.client.chat.completions.create(
+            model=self.model,
+            messages=[{"role": "user", "content": content}]
+        )
         
-        # Dictionary input
-        {"test": "message", "type": "dict"}
-    ]
-    
-    for i, test_input in enumerate(test_cases, 1):
-        try:
-            print(f"\nTest {i}: {type(test_input).__name__}")
-            print(f"Input: {str(test_input)[:100]}...")
+        class Resp:
+            def __init__(self, content):
+                self.content = content
+        
+        return Resp(response.choices[0].message.content)
+
+async def main():
+    try:
+        from browser_use import Agent
+        
+        print("🧪 Testing minimal setup...")
+        
+        llm = MinimalLLM()
+        agent = Agent(
+            task="Go to https://httpbin.org/json and describe the JSON you see",
+            llm=llm
+        )
+        
+        result = await agent.run()
+        
+        if result and result.final_result():
+            print("✅ SUCCESS! Browser automation is working!")
+            print(f"Result: {result.final_result()}")
+        else:
+            print("❌ Failed - no result")
             
-            result = await adapter.ainvoke(test_input)
-            print(f"✓ Success: {result.content[:50]}...")
-            
-        except Exception as e:
-            print(f"✗ Failed: {e}")
-    
-    print("\nLLM Adapter test completed!")
+    except Exception as e:
+        print(f"❌ Error: {e}")
+        import traceback
+        traceback.print_exc()
 
 if __name__ == "__main__":
-    asyncio.run(test_adapter())
+    asyncio.run(main())

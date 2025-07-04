@@ -74,6 +74,25 @@ class OpenAIAdapter:
         messages = self._convert_to_messages(input)
         return self.llm.invoke(messages, config=config, **kwargs)
 
+    def get(self, key: str, default=None):
+        """Get method for compatibility with BrowserUse"""
+        return getattr(self, key, default)
+
+    @property
+    def name(self):
+        """Model name property"""
+        return self.model_name
+
+    @property
+    def temperature(self):
+        """Temperature property"""
+        return getattr(self.llm, 'temperature', 0.1)
+
+    @property
+    def max_tokens(self):
+        """Max tokens property"""
+        return getattr(self.llm, 'max_tokens', None)
+
     # Delegate any missing attributes to the underlying LLM
     def __getattr__(self, name):
         return getattr(self.llm, name)

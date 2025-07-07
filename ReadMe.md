@@ -1,101 +1,123 @@
-# Browser-Use Demo - Web Scraping Automation
+# Automated Job and Learning Resource Agent
 
-This project demonstrates web scraping automation using the browser-use library with OpenAI GPT models. It can scrape Hacker News posts, search Google for MLOps resources, and extract structured data from web pages.
+This project uses `browser-use` and `OpenAI GPT-4o` to perform two automated web tasks:
 
-## 🚀 Quick Start
+1. **Job Search on LinkedIn**  
+   Finds jobs that match a user profile (based on name, skills, experience, and location), posted within the last 24 hours.
 
-### 1. Clone the Repository
-\`\`\`bash
-git clone https://github.com/AmoloWashington/BrowserUse_Simple_Task.git
-cd browser-use-demo
-\`\`\`
+2. **Learning Resource Aggregation**  
+   Searches for **MLOps learning resources and best practices** from high-quality, freely available sources. It returns the top 10 with summaries and metadata (difficulty, type, etc.).
 
-### 2. Set Up Python Environment
-\`\`\`bash
-# Create virtual environment
-python -m venv env
+---
 
-# Activate virtual environment
-# On Windows:
-env\Scripts\activate
-# On macOS/Linux:
-source env/bin/activate
-\`\`\`
+## 🔧 Tech Stack
 
-### 3. Install Dependencies
-\`\`\`bash
-pip install browser-use python-dotenv openai playwright pydantic
-\`\`\`
+- **Python 3.10+**
+- **[browser-use](https://pypi.org/project/browser-use/)** for browser automation
+- **OpenAI GPT-4o** for intelligent task execution
+- **Pydantic** for structured data models
+- **dotenv** for environment configuration
 
-### 4. Install Playwright Browsers
-\`\`\`bash
-playwright install chromium
-\`\`\`
+---
 
-### 5. Set Up Environment Variables
-Create a `.env` file in the project root:
-\`\`\`env
+
+
+## ✅ Requirements
+
+Install the following Python dependencies (preferably in a virtual environment):
+
+```bash
+pip install browser-use openai python-dotenv pydantic
+```
+
+You also need:
+- A Chromium-based browser installed (e.g., Chrome)
+- An OpenAI API key
+
+---
+
+## 🔑 Environment Variables
+
+Create a `.env` file in the root directory with your OpenAI API key:
+
+```env
 OPENAI_API_KEY=your_openai_api_key_here
-\`\`\`
+```
 
-### 1. Basic Functionality Test
-Tests if browser automation is working:
-\`\`\`bash
+---
+
+## 🚀 How to Run
+
+Make sure Python and Chrome are installed.
+
+Then run:
+
+```bash
 python structured.py
-\`\`\`
+```
 
-### 2. Simple Scraper
-Basic web scraping without structured output:
-\`\`\`bash
-python basic_scraper.py
-\`\`\`
+> ⚠️ Note: If you face issues with browser launch paths on Windows, ensure the `executable_path` in the script points to your actual Chrome installation:
+>
+> ```python
+> executable_path='C:\Program Files\Google\Chrome\Application\chrome.exe'
+> ```
 
-### 3. Structured Data Scraper
-Advanced scraper with JSON output:
-\`\`\`bash
-python structured.py
-\`\`\`
+---
 
-## 📊 What Each Script Does
+## 🧠 What the Script Does
 
-### `test_adapter.py`
-- **Purpose**: Verify basic browser automation works
-- **Target**: httpbin.org/json (simple test site)
-- **Output**: Console output describing what it sees
+The agent:
+1. Navigates to LinkedIn and searches for jobs based on the defined `JobSearchProfile` parameters.
+2. Searches Google for top **MLOps** resources.
+3. Parses and summarizes the top 10 freely accessible results.
+4. Returns results in a structured format (defined by `pydantic.BaseModel`).
+5. Gracefully closes the browser session after execution.
 
-### `basic_scraper.py`
-- **Purpose**: Basic web scraping examples
-- **Targets**: 
-  - Hacker News Show HN posts
-  - Google search for MLOps resources
-- **Output**: Console output with scraped data
+---
 
-### `structured.py`
-- **Purpose**: Extract structured data as JSON
-- **Targets**:
-  - Hacker News Show HN posts (title, URL, comments, hours ago)
-  - Google MLOps resources (title, URL, description)
-- 
+## 📝 Example Output
+
+```json
+{
+  "jobsearch": [
+    {
+      "name": "John Doe",
+      "skills": ["MLOps", "Python", "Kubernetes"],
+      "experience_years": 3,
+      "location": "Nairobi"
+    }
+  ],
+  "mlops_resources": [
+    {
+      "title": "Introduction to MLOps",
+      "url": "https://example.com/mlops-course",
+      "summary": "Covers MLOps fundamentals including CI/CD for ML, model deployment, and monitoring.",
+      "type": "Course",
+      "difficulty": "Intermediate"
+    }
+  ]
+}
+```
+
+---
+
 ## 🛠️ Troubleshooting
 
-### Common Issues
+- **Chrome fails to launch?**  
+  Ensure your `executable_path` is valid and points to a Chromium browser.
 
-1. **"Agent.__init__() missing 1 required positional argument: 'llm'"**
-   - Make sure your LLM class has all required attributes
-   - Ensure `model_name` attribute is set
+- **Agent gets stuck or slow?**  
+  Sometimes external websites like LinkedIn can throttle or block automation. Use a VPN or tweak the agent’s delay settings.
 
-2. **"'WorkingLLM' object has no attribute 'model_name'"**
-   - Add `self.model_name = "gpt-4o-mini"` to your LLM class `__init__` method
+---
 
-3. **OpenAI API Key Issues**
-   - Verify your `.env` file exists and contains the correct API key
-   - Check that your OpenAI API key is valid and has credits
+## 📜 License
 
-4. **Browser Issues**
-   - Run `playwright install chromium` to install browser
-   - Check if Chrome/Chromium is properly installed
+MIT License. Use it, hack it, improve it.
 
-### Debug Mode
-To see what the browser is doing, you can enable headful mode by modifying the scripts:
-```python
-os.environ["BROWSER_USE_HEADFUL"] = "true"
+---
+
+## 🙏 Acknowledgements
+
+- [browser-use](https://github.com/gzuidhof/browser-use)
+- [OpenAI](https://platform.openai.com/)

@@ -33,7 +33,7 @@ llm = ChatOpenAI(model="gpt-4o")
 
 async def main():
     agent = Agent(
-        task=""" first Go to linkedin and find for me jobs that matches my profile the jobs should have been posted in the last 24 hours.Then next Search for 'MLOps learning resources' and 'MLOps best practices' on Google.
+        task=""" First Go to linkedin and find for me jobs that matches my profile the jobs should have been posted in the last 24 hours.Then next Search for 'MLOps learning resources' and 'MLOps best practices' on Google.
         Find the top 10 learning resources that are freely accessible (no login required).
         For each resource, provide:
         1. Title of the resource

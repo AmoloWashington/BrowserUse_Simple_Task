@@ -27,7 +27,7 @@ This project uses `browser-use` and `OpenAI GPT-4o` to perform two automated web
 Install the following Python dependencies (preferably in a virtual environment):
 
 ```bash
-pip install browser-use openai python-dotenv pydantic
+pip install requirements.txt
 ```
 
 You also need:

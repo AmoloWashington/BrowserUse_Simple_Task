@@ -17,7 +17,7 @@ async def analyze_navismart():
     agent = Agent(
         task="""Comprehensively analyze https://www.navismartai.com/ by:
         1. Exploring all sections: Home, Features, How it Works, Pricing, Testimonials, Get Started, and Contact Us.
-        2. Interacting with all available features
+        2. Interacting with all available features that is Home, Features, How it Works, Pricing, Testimonials, Get Started, and Contact Us by clicking buttons, filling forms, chatting with the AI(once you click on the Get Started button explore the next page that loads up after clicking the Get Started button and interacting with the AI there and every other feature), etc.
         3. For each feature:
            - Describe its functionality
            - Identify potential problems
